@@ -331,7 +331,7 @@
 <div class="bar">
   <button class="bar-btn" id="backBtn" aria-label="Назад">◀</button>
   <div class="url-wrap">
-    <input id="url" type="text" placeholder="Поиск или URL"
+    <input id="url" type="text" placeholder="Поиск в DuckDuckGo или URL"
            autocomplete="off" autocorrect="off" spellcheck="false" inputmode="url">
     <button class="star" id="starBtn" aria-label="В закладки">☆</button>
   </div>
@@ -380,10 +380,13 @@ const state = {
   activeId: null,
   nextId: 1,
   bookmarks: store.get('bookmarks', [
-    { url:'https://example.com',         name:'Example',  icon:'🧪' },
-    { url:'https://developer.mozilla.org', name:'MDN',    icon:'📚' },
-    { url:'https://github.com',          name:'GitHub',   icon:'🐙' },
-    { url:'https://ru.wikipedia.org',    name:'Вики',     icon:'📖' },
+    // Только сайты, которые разрешают открытие внутри iframe!
+    { url:'https://ru.wikipedia.org',          name:'Википедия',   icon:'📖' },
+    { url:'https://archive.org',               name:'Archive',     icon:'🏛️' },
+    { url:'https://html.duckduckgo.com/html/', name:'DuckDuckGo',  icon:'🦆' },
+    { url:'https://example.com',               name:'Example',     icon:'🧪' },
+    { url:'https://developer.mozilla.org',     name:'MDN',         icon:'📚' },
+    { url:'https://www.wikihow.com',           name:'wikiHow',     icon:'🛠️' }
   ]),
   history: store.get('history', [])
 };
@@ -419,7 +422,10 @@ function toUrl(input) {
   if (/^[\w-]+(\.[\w-]+)+(\/|$)/.test(s) || s.startsWith('localhost')) {
     return 'https://' + s;
   }
-  return 'https://www.google.com/search?q=' + encodeURIComponent(s);
+  
+  // ИСПОЛЬЗУЕМ DUCKDUCKGO ВМЕСТО GOOGLE
+  // html.duckduckgo.com отлично работает внутри iframe
+  return 'https://html.duckduckgo.com/html/?q=' + encodeURIComponent(s);
 }
 
 /* ============================================================
@@ -572,7 +578,7 @@ function renderStart(tab, viewEl) {
     <div class="start">
       <h1>🌐 Браузер</h1>
       <div class="start-search">
-        <input type="text" class="s-input" placeholder="Поиск или URL"
+        <input type="text" class="s-input" placeholder="Поиск в DuckDuckGo или URL"
                autocomplete="off" autocorrect="off" spellcheck="false" inputmode="url">
         <button class="s-go">Найти</button>
       </div>
